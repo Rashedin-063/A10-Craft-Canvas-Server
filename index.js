@@ -29,9 +29,9 @@ async function run() {
     await client.connect();
 
     const userCollection = client.db('craftCanvasDB').collection('users')
+    const itemCollection = client.db('craftCanvasDB').collection('items')
 
     // user related api
-
     app.get('/users', async (req, res) => {
       const cursor = userCollection.find();
       const result = await cursor.toArray();
@@ -65,6 +65,19 @@ lastLoggedIn: user.lastSignIn
       const result = await userCollection.updateOne(query, updatedUser);
 
       res.send(result)
+    })
+
+    // add items related api
+  app.get('/items', async (req, res) => {
+    const cursor = itemCollection.find();
+    const result = await cursor.toArray();
+    res.send(result);
+  });
+
+    app.post('/items', async (req, res) => {
+       const user = req.body;
+       const result = await itemCollection.insertOne(user);
+       res.send(result);
     })
 
 
