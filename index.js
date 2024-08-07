@@ -52,21 +52,6 @@ async function run() {
       res.send(result)
     })
 
-    app.patch('/users', async (req, res) => {
-      const user = req.body;
-
-      const query = { email: user.email }
-      const updatedUser = {
-        $set: {
-lastLoggedIn: user.lastSignIn
-        },
-      }
-
-      const result = await userCollection.updateOne(query, updatedUser);
-
-      res.send(result)
-    })
-
     // add items related api
   app.get('/items', async (req, res) => {
     const cursor = itemCollection.find();
@@ -87,6 +72,24 @@ lastLoggedIn: user.lastSignIn
        const result = await itemCollection.insertOne(user);
        res.send(result);
     })
+
+     app.patch('/items/:id', async (req, res) => {
+       const id = req.params.id;
+       console.log(id)
+       
+       const updatedUserInfo = req.body
+       const query = { _id: new ObjectId(id) };
+
+        const updatedUser = {
+          $set: {
+            ...updatedUserInfo,
+          },
+        };
+
+       const result = await itemCollection.updateOne(query, updatedUser);
+
+       res.send(result);
+     });
 
     app.delete('/items/:id', async (req, res) => {
       const id = req.params.id;
