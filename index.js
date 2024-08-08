@@ -30,6 +30,7 @@ async function run() {
 
     const userCollection = client.db('craftCanvasDB').collection('users')
     const itemCollection = client.db('craftCanvasDB').collection('items')
+    const categoryCollection = client.db('craftCanvasDB').collection('subcategory')
 
     // user related api
     app.get('/users', async (req, res) => {
@@ -99,6 +100,13 @@ async function run() {
       res.send(result)
     })
 
+    // subcategory api
+    app.get('/category', async (req, res) => {
+      const cursor = categoryCollection.find();
+      const result = await cursor.toArray();
+
+      res.send(result)
+    })
 
     // Send a ping to confirm a successful connection
     await client.db('admin').command({ ping: 1 });
